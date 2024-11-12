@@ -1,4 +1,4 @@
-import status from "http-status";
+import status from 'http-status'
 
 const HTTP_STATUS = {
   CONTINUE: status.CONTINUE,
@@ -41,6 +41,6 @@ const HTTP_STATUS = {
   SERVICE_UNAVAILABLE: status.SERVICE_UNAVAILABLE,
   GATEWAY_TIMEOUT: status.GATEWAY_TIMEOUT,
   HTTP_VERSION_NOT_SUPPORTED: status.HTTP_VERSION_NOT_SUPPORTED,
-};
+}
 
-export default HTTP_STATUS;
+export default HTTP_STATUS

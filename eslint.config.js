@@ -1,22 +1,57 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
+import globals from 'globals'
+import pluginJs from '@eslint/js'
+import tseslint from 'typescript-eslint'
+import eslintConfigPrettier from 'eslint-config-prettier'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  { ignores: ['node_modules', 'dist'] },
   {
-    files: ["**/*.{js,cjs,mjs,ts}"],
-    ignorePatterns: ["dist/**/*", "node_modules/**"],
-  },
-  { languageOptions: { globals: globals.node } },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  {
-    rules: {
-      "no-console": "warn",
-      "@typescript-eslint/no-explicit-any": "warn",
-      "no-var": "error",
-      "@typescript-eslint/no-require-imports": "error",
+    files: ['**/*.{js,cjs,mjs,ts}'],
+
+    linterOptions: {
+      reportUnusedDisableDirectives: true,
     },
   },
-];
+  // JavaScript files config
+  // {
+  //   files: ['**/*.{js,cjs,mjs}'],
+  //   ignores: ['node_modules/**', 'dist/**'],
+  //   languageOptions: {
+  //     globals: globals.node,
+  //   },
+  //   rules: {
+  //     'no-console': 'warn',
+  //     'no-var': 'error',
+  //   },
+  // },
+  // TypeScript files config
+  {
+    files: ['**/*.ts'],
+    ignores: ['node_modules/**', 'dist/**'],
+    languageOptions: {
+      globals: globals.node,
+      parser: tseslint.parser,
+      parserOptions: {
+        project: ['./tsconfig.eslint.json'],
+      },
+    },
+    rules: {
+      'no-console': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-require-imports': 'error',
+      '@typescript-eslint/strict-boolean-expressions': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
+      '@typescript-eslint/naming-convention': [
+        'error',
+        { selector: 'interface', format: ['PascalCase'], prefix: ['I'] },
+      ],
+    },
+  },
+  pluginJs.configs.recommended,
+  ...tseslint.configs.strict,
+  eslintConfigPrettier,
+]

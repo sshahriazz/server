@@ -1,15 +1,15 @@
-import createApp from "./create-app";
+import createApp from './create-app'
 
-import index from "../routes/index.route";
-import taskRouter from "../routes/tasks/tasks.index";
-import configureOpenApi from "./configure-openapi";
+import index from '../routes/index.route'
+import taskRouter from '../routes/tasks/tasks.index'
+import configureOpenApi from './configure-openapi'
 
-const app = createApp();
-const routes = [index, taskRouter];
+const app = createApp()
+const routes = [index, taskRouter]
 
-configureOpenApi(app);
+configureOpenApi(app)
 
 routes.forEach((route) => {
-  app.route("/", route);
-});
-export default app;
+  app.route('/', route)
+})
+export default app
