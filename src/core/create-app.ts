@@ -11,36 +11,35 @@ import onError from '@/middlewares/onError'
 import appEnv from '@/config/env'
 
 export function createRouter() {
-  return new OpenAPIHono<IAppBindings>({
-    strict: false,
-    defaultHook: defaultHook,
-  })
+    return new OpenAPIHono<IAppBindings>({
+        strict: false,
+        defaultHook: defaultHook,
+    })
 }
 
 export default function createApp() {
-  const app = createRouter()
+    const app = createRouter()
 
-  app
-    .use(serveEmojiFavicon('🦄'))
-    .use(
-      requestId({
-        generator: () => crypto.randomUUID(),
-      }),
-    )
-    .use(
-      pinoLogger({
-        pino: pino(
-          {
-            level: appEnv.LOG_LEVEL || 'info',
-          },
-          appEnv.NODE_ENV === 'production' ? undefined : pretty(),
-        ),
-        http: { responseTime: true, referRequestIdKey: 'requestId' },
-      }),
-    )
+    app.use(serveEmojiFavicon('🦄'))
+        .use(
+            requestId({
+                generator: () => crypto.randomUUID(),
+            })
+        )
+        .use(
+            pinoLogger({
+                pino: pino(
+                    {
+                        level: appEnv.LOG_LEVEL || 'info',
+                    },
+                    appEnv.NODE_ENV === 'production' ? undefined : pretty()
+                ),
+                http: { responseTime: true, referRequestIdKey: 'requestId' },
+            })
+        )
 
-  app.notFound(notFound)
-  app.onError(onError)
+    app.notFound(notFound)
+    app.onError(onError)
 
-  return app
+    return app
 }

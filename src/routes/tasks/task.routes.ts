@@ -7,241 +7,233 @@ import jsonContentOneOf from '@/schema/jsonContent-oneof'
 import jsonContent from '@/schema/jsonContent'
 
 export const list = createRoute({
-  path: '/tasks',
-  tags: ['Tasks'],
-  method: 'get',
-
-  responses: {
-    [HTTP_STATUS.OK]: {
-      content: {
-        'application/json': {
-          schema: z.array(selectTasks),
-        },
-      },
-      description: 'The list of Task',
+    path: '/tasks',
+    tags: ['Tasks'],
+    method: 'get',
+    responses: {
+        [HTTP_STATUS.OK]: jsonContent(z.array(selectTasks), 'List of tasks'),
     },
-  },
 })
 
 export const single = createRoute({
-  path: '/tasks/{id}',
-  tags: ['Tasks'],
-  method: 'get',
-  request: {
-    params: z.object({
-      id: z.coerce.number().openapi({
-        description: 'Task ID',
-        param: {
-          name: 'id',
-          in: 'path',
-        },
-        example: 1,
-      }),
-    }),
-  },
-
-  responses: {
-    [HTTP_STATUS.OK]: {
-      content: {
-        'application/json': {
-          schema: selectTasks,
-        },
-      },
-      description: 'Requested tasks',
-    },
-    [HTTP_STATUS.NOT_FOUND]: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            message: z.string().openapi({
-              example: 'Task not found',
-            }),
-          }),
-        },
-      },
-      description: 'Task not found',
-    },
-    [HTTP_STATUS.UNPROCESSABLE_ENTITY]: {
-      content: {
-        'application/json': {
-          schema: createErrorSchema(
-            z.object({
-              id: z.coerce.number().openapi({
+    path: '/tasks/{id}',
+    tags: ['Tasks'],
+    method: 'get',
+    request: {
+        params: z.object({
+            id: z.coerce.number().openapi({
                 description: 'Task ID',
                 param: {
-                  name: 'id',
-                  in: 'path',
+                    name: 'id',
+                    in: 'path',
                 },
                 example: 1,
-              }),
             }),
-          ),
-        },
-      },
-      description: 'Invalid Id error',
+        }),
     },
-  },
+
+    responses: {
+        [HTTP_STATUS.OK]: {
+            content: {
+                'application/json': {
+                    schema: selectTasks,
+                },
+            },
+            description: 'Requested tasks',
+        },
+        [HTTP_STATUS.NOT_FOUND]: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string().openapi({
+                            example: 'Task not found',
+                        }),
+                    }),
+                },
+            },
+            description: 'Task not found',
+        },
+        [HTTP_STATUS.UNPROCESSABLE_ENTITY]: {
+            content: {
+                'application/json': {
+                    schema: createErrorSchema(
+                        z.object({
+                            id: z.coerce.number().openapi({
+                                description: 'Task ID',
+                                param: {
+                                    name: 'id',
+                                    in: 'path',
+                                },
+                                example: 1,
+                            }),
+                        })
+                    ),
+                },
+            },
+            description: 'Invalid Id error',
+        },
+    },
 })
 
 export const create = createRoute({
-  path: '/tasks',
-  tags: ['Tasks'],
-  method: 'post',
-  request: {
-    body: {
-      content: {
-        'application/json': {
-          schema: insertTask,
+    path: '/tasks',
+    tags: ['Tasks'],
+    method: 'post',
+    request: {
+        body: {
+            content: {
+                'application/json': {
+                    schema: insertTask,
+                },
+            },
+            required: true,
+            description: 'Provide a task',
         },
-      },
-      required: true,
-      description: 'Provide a task',
     },
-  },
-  responses: {
-    [HTTP_STATUS.OK]: {
-      content: {
-        'application/json': {
-          schema: selectTasks,
+    responses: {
+        [HTTP_STATUS.OK]: {
+            content: {
+                'application/json': {
+                    schema: selectTasks,
+                },
+            },
+            description: 'Created Task',
         },
-      },
-      description: 'Created Task',
-    },
-    [HTTP_STATUS.UNPROCESSABLE_ENTITY]: {
-      content: {
-        'application/json': {
-          schema: createErrorSchema(insertTask),
+        [HTTP_STATUS.UNPROCESSABLE_ENTITY]: {
+            content: {
+                'application/json': {
+                    schema: createErrorSchema(insertTask),
+                },
+            },
+            description: 'Validation Error(s) in creating task',
         },
-      },
-      description: 'Validation Error(s) in creating task',
     },
-  },
 })
 
 export const patch = createRoute({
-  path: '/tasks/{id}',
-  tags: ['Tasks'],
-  method: 'patch',
-  request: {
-    params: z.object({
-      id: z.coerce.number().openapi({
-        description: 'Task ID',
-        param: {
-          name: 'id',
-          in: 'path',
-        },
-        example: 1,
-      }),
-    }),
-    body: {
-      content: {
-        'application/json': {
-          schema: patchTask,
-        },
-      },
-      required: true,
-      description: 'Update a task',
-    },
-  },
-  responses: {
-    [HTTP_STATUS.OK]: {
-      content: {
-        'application/json': {
-          schema: selectTasks,
-        },
-      },
-      description: 'Updated Task',
-    },
-    [HTTP_STATUS.NOT_FOUND]: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            message: z.string().openapi({
-              example: 'Task not found',
-            }),
-          }),
-        },
-      },
-      description: 'Task not found',
-    },
-    [HTTP_STATUS.UNPROCESSABLE_ENTITY]: jsonContentOneOf(
-      [
-        createErrorSchema(patchTask),
-        createErrorSchema(
-          z.object({
+    path: '/tasks/{id}',
+    tags: ['Tasks'],
+    method: 'patch',
+    request: {
+        params: z.object({
             id: z.coerce.number().openapi({
-              description: 'Task ID',
-              param: {
-                name: 'id',
-                in: 'path',
-              },
-              example: 1,
+                description: 'Task ID',
+                param: {
+                    name: 'id',
+                    in: 'path',
+                },
+                example: 1,
             }),
-          }),
+        }),
+        body: {
+            content: {
+                'application/json': {
+                    schema: patchTask,
+                },
+            },
+            required: true,
+            description: 'Update a task',
+        },
+    },
+    responses: {
+        [HTTP_STATUS.OK]: {
+            content: {
+                'application/json': {
+                    schema: selectTasks,
+                },
+            },
+            description: 'Updated Task',
+        },
+        [HTTP_STATUS.NOT_FOUND]: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string().openapi({
+                            example: 'Task not found',
+                        }),
+                    }),
+                },
+            },
+            description: 'Task not found',
+        },
+        [HTTP_STATUS.UNPROCESSABLE_ENTITY]: jsonContentOneOf(
+            [
+                createErrorSchema(patchTask),
+                createErrorSchema(
+                    z.object({
+                        id: z.coerce.number().openapi({
+                            description: 'Task ID',
+                            param: {
+                                name: 'id',
+                                in: 'path',
+                            },
+                            example: 1,
+                        }),
+                    })
+                ),
+            ],
+            'Invalid Id error or Validation Error(s) in updating task'
         ),
-      ],
-      'Invalid Id error or Validation Error(s) in updating task',
-    ),
-  },
+    },
 })
 
 export const remove = createRoute({
-  path: '/tasks/{id}',
-  tags: ['Tasks'],
-  method: 'delete',
-  request: {
-    params: z.object({
-      id: z.coerce.number().openapi({
-        description: 'Task ID',
-        param: {
-          name: 'id',
-          in: 'path',
-        },
-        example: 1,
-      }),
-    }),
-    body: {
-      content: {
-        'application/json': {
-          schema: patchTask,
-        },
-      },
-      required: true,
-      description: 'Update a task',
-    },
-  },
-  responses: {
-    [HTTP_STATUS.NO_CONTENT]: {
-      description: 'Task Deleted',
-    },
-    [HTTP_STATUS.NOT_FOUND]: {
-      content: {
-        'application/json': {
-          schema: z.object({
-            message: z.string().openapi({
-              example: 'Task not found',
+    path: '/tasks/{id}',
+    tags: ['Tasks'],
+    method: 'delete',
+    request: {
+        params: z.object({
+            id: z.coerce.number().openapi({
+                description: 'Task ID',
+                param: {
+                    name: 'id',
+                    in: 'path',
+                },
+                example: 1,
             }),
-          }),
-        },
-      },
-      description: 'Task not found',
-    },
-    [HTTP_STATUS.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(
-        z.object({
-          id: z.coerce.number().openapi({
-            description: 'Task ID',
-            param: {
-              name: 'id',
-              in: 'path',
-            },
-            example: 1,
-          }),
         }),
-      ),
-      'Invalid Id error ',
-    ),
-  },
+        body: {
+            content: {
+                'application/json': {
+                    schema: patchTask,
+                },
+            },
+            required: true,
+            description: 'Update a task',
+        },
+    },
+    responses: {
+        [HTTP_STATUS.NO_CONTENT]: {
+            description: 'Task Deleted',
+        },
+        [HTTP_STATUS.NOT_FOUND]: {
+            content: {
+                'application/json': {
+                    schema: z.object({
+                        message: z.string().openapi({
+                            example: 'Task not found',
+                        }),
+                    }),
+                },
+            },
+            description: 'Task not found',
+        },
+        [HTTP_STATUS.UNPROCESSABLE_ENTITY]: jsonContent(
+            createErrorSchema(
+                z.object({
+                    id: z.coerce.number().openapi({
+                        description: 'Task ID',
+                        param: {
+                            name: 'id',
+                            in: 'path',
+                        },
+                        example: 1,
+                    }),
+                })
+            ),
+            'Invalid Id error '
+        ),
+    },
 })
 
 export type ListTaskRoute = typeof list

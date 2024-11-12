@@ -4,13 +4,13 @@ A modern API built with Hono.js and Drizzle ORM.
 
 ## Prerequisites
 
-- Node.js (Latest LTS recommended)
-- Database of your choice (SQLite by default)
-  - Supported databases:
-    - PostgreSQL
-    - MySQL
-    - SQLite
-    - Turso (LibSQL)
+-   Node.js (Latest LTS recommended)
+-   Database of your choice (SQLite by default)
+    -   Supported databases:
+        -   PostgreSQL
+        -   MySQL
+        -   SQLite
+        -   Turso (LibSQL)
 
 ## Setup
 
@@ -50,24 +50,24 @@ DATABASE_URL=postgres://user:password@localhost:5432/mydatabase
 
 1. Create production environment file:
 
-   ```
-   cp .env.example .env
-   ```
+    ```
+    cp .env.example .env
+    ```
 
 2. Build the application:
 
-   ```
-   npm run build
-   ```
+    ```
+    npm run build
+    ```
 
 3. Start the production server:
-   ```
-   node dist/index.mjs
-   ```
+    ```
+    node dist/index.mjs
+    ```
 
 ## Additional Scripts
 
-- `npm run dev` - Start development server with hot reload
-- `npm run build` - Build for production
-- `npm run lint` - Run linting
-- `npm run lint-fix` - Fix linting issues
+-   `npm run dev` - Start development server with hot reload
+-   `npm run build` - Build for production
+-   `npm run lint` - Run linting
+-   `npm run lint-fix` - Fix linting issues

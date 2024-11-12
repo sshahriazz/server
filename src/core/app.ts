@@ -10,6 +10,6 @@ const routes = [index, taskRouter]
 configureOpenApi(app)
 
 routes.forEach((route) => {
-  app.route('/', route)
+    app.route('/', route)
 })
 export default app
