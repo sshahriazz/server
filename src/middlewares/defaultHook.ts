@@ -1,8 +1,7 @@
 import HTTP_STATUS from '@/config/statusCodes'
 import type { Hook } from '@hono/zod-openapi'
-import type { Env } from 'hono'
 
-const defaultHook: Hook<unknown, Env, string, unknown> = (result, c) => {
+const defaultHook: Hook<any, any, any, any> = (result, c) => {
   if (!result.success) {
     return c.json(
       {

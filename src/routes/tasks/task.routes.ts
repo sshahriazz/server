@@ -3,6 +3,8 @@ import { insertTask, patchTask, selectTasks } from 'src/db/schema'
 
 import HTTP_STATUS from 'src/config/statusCodes'
 import createErrorSchema from '@/schema/error.schema'
+import jsonContentOneOf from '@/schema/jsonContent-oneof'
+import jsonContent from '@/schema/jsonContent'
 
 export const list = createRoute({
   path: '/tasks',
@@ -162,27 +164,24 @@ export const patch = createRoute({
       },
       description: 'Task not found',
     },
-    [HTTP_STATUS.UNPROCESSABLE_ENTITY]: {
-      content: {
-        'application/json': {
-          schema: createErrorSchema(
-            z
-              .object({
-                id: z.coerce.number().openapi({
-                  description: 'Task ID',
-                  param: {
-                    name: 'id',
-                    in: 'path',
-                  },
-                  example: 1,
-                }),
-              })
-              .or(patchTask),
-          ),
-        },
-      },
-      description: 'Invalid Id error / Validation Error(s) in updating task',
-    },
+    [HTTP_STATUS.UNPROCESSABLE_ENTITY]: jsonContentOneOf(
+      [
+        createErrorSchema(patchTask),
+        createErrorSchema(
+          z.object({
+            id: z.coerce.number().openapi({
+              description: 'Task ID',
+              param: {
+                name: 'id',
+                in: 'path',
+              },
+              example: 1,
+            }),
+          }),
+        ),
+      ],
+      'Invalid Id error or Validation Error(s) in updating task',
+    ),
   },
 })
 
@@ -227,25 +226,21 @@ export const remove = createRoute({
       },
       description: 'Task not found',
     },
-    [HTTP_STATUS.UNPROCESSABLE_ENTITY]: {
-      content: {
-        'application/json': {
-          schema: createErrorSchema(
-            z.object({
-              id: z.coerce.number().openapi({
-                description: 'Task ID',
-                param: {
-                  name: 'id',
-                  in: 'path',
-                },
-                example: 1,
-              }),
-            }),
-          ),
-        },
-      },
-      description: 'Invalid Id error / Validation Error(s) in updating task',
-    },
+    [HTTP_STATUS.UNPROCESSABLE_ENTITY]: jsonContent(
+      createErrorSchema(
+        z.object({
+          id: z.coerce.number().openapi({
+            description: 'Task ID',
+            param: {
+              name: 'id',
+              in: 'path',
+            },
+            example: 1,
+          }),
+        }),
+      ),
+      'Invalid Id error ',
+    ),
   },
 })
 

@@ -6,6 +6,9 @@ import eslintConfigPrettier from 'eslint-config-prettier'
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   { ignores: ['node_modules', 'dist'] },
+  pluginJs.configs.recommended,
+  ...tseslint.configs.strict,
+  eslintConfigPrettier,
   {
     files: ['**/*.{js,cjs,mjs,ts}'],
 
@@ -14,23 +17,21 @@ export default [
     },
   },
   // JavaScript files config
-  // {
-  //   files: ['**/*.{js,cjs,mjs}'],
-  //   ignores: ['node_modules/**', 'dist/**'],
-  //   languageOptions: {
-  //     globals: globals.node,
-  //   },
-  //   rules: {
-  //     'no-console': 'warn',
-  //     'no-var': 'error',
-  //   },
-  // },
+  {
+    files: ['**/*.{js,cjs,mjs}'],
+    languageOptions: {
+      globals: globals.node,
+    },
+    rules: {
+      'no-console': 'warn',
+      'no-var': 'error',
+    },
+  },
   // TypeScript files config
   {
     files: ['**/*.ts'],
-    ignores: ['node_modules/**', 'dist/**'],
+
     languageOptions: {
-      globals: globals.node,
       parser: tseslint.parser,
       parserOptions: {
         project: ['./tsconfig.eslint.json'],
@@ -38,7 +39,7 @@ export default [
     },
     rules: {
       'no-console': 'warn',
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': ['warn'],
       '@typescript-eslint/no-require-imports': 'error',
       '@typescript-eslint/strict-boolean-expressions': 'error',
       '@typescript-eslint/no-unused-vars': [
@@ -51,7 +52,4 @@ export default [
       ],
     },
   },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.strict,
-  eslintConfigPrettier,
 ]
