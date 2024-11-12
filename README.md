@@ -36,6 +36,10 @@ This project uses Drizzle ORM which supports multiple databases. You can switch 
 
 1. SQLite (Default for development):
 
+```
+DATABASE_URL=file:dev.db
+```
+
 2. PostgreSQL:
 
 ```
@@ -47,7 +51,7 @@ DATABASE_URL=postgres://user:password@localhost:5432/mydatabase
 1. Create production environment file:
 
    ```
-   cp .env.example .env.production
+   cp .env.example .env
    ```
 
 2. Build the application:

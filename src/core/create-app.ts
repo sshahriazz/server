@@ -4,10 +4,10 @@ import pino from "pino";
 import pretty from "pino-pretty";
 import { requestId } from "hono/request-id";
 import type { AppBindings } from "@/types";
-import defaultHook from "@/utils/defaultHook";
+import defaultHook from "@/middlewares/defaultHook";
 import { serveEmojiFavicon } from "@/favicon";
-import notFound from "@/utils/notfound";
-import onError from "@/utils/onError";
+import notFound from "@/middlewares/notfound";
+import onError from "@/middlewares/onError";
 import appEnv from "@/config/env";
 
 export function createRouter() {
